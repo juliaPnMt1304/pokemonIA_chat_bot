@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Community</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background-color: #CDE5DA;
+      overflow-x: hidden;
+    }
+
+   
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 60px;
+      background-color: #E6F1EC;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    nav ul {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #2E5F4D;
+      font-weight: 600;
+      font-size: 20px;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+    nav ul li a:hover {
+    transform: scale(1.2);
+    text-shadow: 0 0 10px #4CAF88, 0 0 20px #4CAF88;
+    color: #125037; /* opcional, muda a cor ao passar o mouse */
+  }
+
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      max-width: 50%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-background {
+      position: absolute;
+      background-color: #E6F1EC;
+      border-radius: 30px;
+      top: 40px;
+      left: 40px;
+      right: 50%;
+      bottom: 40px;
+      z-index: 1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-text h1 {
+      font-size: 46px;
+      color: #2E5F4D;
+      margin-bottom: 20px;
+    }
+
+    .hero-text form {
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .hero-text input {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 25px 0 0 25px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .hero-text button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 0 25px 25px 0;
+      background-color: #4CAF88;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .pikachu-img {
+      max-height: 350px;
+      z-index: 2;
+    }
+
+    .rain-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .rain-container img {
+      position: absolute;
+      width: 50px;
+      animation: fall linear infinite;
+      opacity: 0.9;
+    }
+
+      @keyframes fall {
+      0% {
+        transform: translateY(-100px);
+      }
+      100% {
+        transform: translateY(120vh); /* passa da tela */
+      }
+    }
+
+    .special-pokemon {
+      filter: drop-shadow(0 0 15px gold);
+      width: 40px !important;
+      z-index: 10;
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="rain-container" id="rain"></div>
+
+  <header>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/2560px-International_Pok%C3%A9mon_logo.svg.png" class="logo" alt="Pokemon Logo">
+    <nav>
+      <ul>
+        <li><a href="pokemon.html">Home</a></li>
+        <li><a href="characters.html" aria-current="page">Personagens</a></li>
+        <li><a href="series.html">Séries</a></li>
+        <li><a href="pessoas.html">Integrantes</a></li>
+      </ul>
+    </nav>
+  
+  </header>
+
+  <section class="hero">
+    <div class="hero-background"></div>
+    <div class="hero-text">
+      <h1>FAÇA UMA PERGUNTA<br>SOBRE O UNIVERSO POKEMON</h1>
+      <form onsubmit="event.preventDefault(); askQuestion();">
+        <input type="text" id="questionInput" placeholder="Faça uma pergunta" required>
+        <button type="submit">-></button>
+      </form>
+      <p id="response" style="margin-top: 15px; color: #2E5F4D; font-weight: 500;"></p>
+    </div>
+    <img class="pikachu-img" src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" alt="Pikachu">
+  </section>
+  <script>
+    function createRain() {
+    const container = document.getElementById('rain');
+    for (let i = 0; i < 30; i++) {
+      const img = document.createElement('img');
+
+      if (Math.random() < 0.001) {
+        img.src = 'imagens/download.png'; 
+        img.classList.add('special-pokemon');
+      } else {
+        const starters = [
+          'https://assets.pokemon.com/assets/cms2/img/pokedex/full/001.png',
+          'https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png',
+          'https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png'
+        ];
+        img.src = starters[Math.floor(Math.random() * starters.length)];
+      }
+
+      img.style.position = "absolute";
+      img.style.left = `${Math.random() * 100}%`;
+      img.style.top = "-100px"; // começa fora da tela
+
+      const duration = 4 + Math.random() * 4;
+      img.style.animation = `fall ${duration}s linear`;
+      img.style.opacity = 0.9;
+      img.style.width = "50px";
+
+      img.addEventListener("animationend", () => {
+        img.remove();
+      });
+
+      container.appendChild(img);
+    }
+  }
+
+      
+  
+    createRain();
+    setInterval(createRain, 1700);
+    
+    </script>
+    
+</body>
+</html>
